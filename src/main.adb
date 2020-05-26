@@ -48,7 +48,7 @@ begin
                   declare
                      U : PasswordDatabase.URL := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                   begin
-                     if not Locked then
+                     if not Locked and PasswordDatabase.Has_Password_For (DB,U) then
                         Put_Line(PasswordDatabase.To_String(PasswordDatabase.Get(DB,U)));
                      end if;
                   end;
@@ -60,7 +60,7 @@ begin
                   declare
                      U : PasswordDatabase.URL := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                   begin
-                     if not Locked then
+                     if not Locked and PasswordDatabase.Has_Password_For(DB,U) then
                         PasswordDatabase.Remove(DB,U);
                      end if;
                   end;
@@ -108,47 +108,4 @@ begin
          end;
       end;
    end loop;
-
-   Put_Line("Adding an entry to the database");
-   PasswordDatabase.Put(DB,U1,P1);
-
-   Put_Line("Reading the entry:");
-   Put_Line(PasswordDatabase.To_String(PasswordDatabase.Get(DB,U1)));
-
-   Put_Line("Removing the entry");
-   PasswordDatabase.Remove(DB,U1);
-   If PasswordDatabase.Has_Password_For(DB,U1) then
-      Put_Line("Entry still present! It is: ");
-      Put_Line(PasswordDatabase.To_String(PasswordDatabase.Get(DB,U1)));
-   else
-      Put_Line("Entry successfully removed");
-   end if;
-
-   Put_Line("Reading a line of input. Enter some text (at most 3 tokens): ");
-   Lines.Get_Line(S);
-
-   Put_Line("Splitting the text into at most 4 tokens");
-   declare
-      T : MyStringTokeniser.TokenArray(1..5) := (others => (Start => 1, Length => 0));
-      NumTokens : Natural;
-   begin
-      MyStringTokeniser.Tokenise(Lines.To_String(S),T,NumTokens);
-      Put("You entered "); Put(NumTokens); Put_Line(" tokens.");
-      if NumTokens > 3 then
-         Put_Line("Too many tokens!");
-      else
-         for I in 1..NumTokens loop
-            declare
-               TokStr : String := Lines.To_String(Lines.Substring(S,T(I).Start,T(I).Start+T(I).Length-1));
-            begin
-               Put("Token "); Put(I); Put(" is: """);
-               Put(TokStr); Put_Line("""");
-            end;
-         end loop;
-      end if;
-   end;
-
-   If PIN."="(PIN1,PIN2) then
-      Put_Line("The two PINs are equal, as expected.");
-   end if;
 end Main;
