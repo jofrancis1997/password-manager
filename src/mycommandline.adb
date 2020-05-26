@@ -19,6 +19,4 @@ package body MyCommandLine is
       return Ada.Command_Line.Argument(Number);
    end Argument;
 
-
-
 end MyCommandLine;

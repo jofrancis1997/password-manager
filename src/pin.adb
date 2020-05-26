@@ -18,6 +18,4 @@ package body PIN with SPARK_Mode is
       return PIN(Result);
    end From_String;
 
-
-
 end PIN;

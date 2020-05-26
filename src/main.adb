@@ -15,16 +15,27 @@ procedure Main is
    PIN2  : PIN.PIN := PIN.From_String("1234");
    package Lines is new MyString(Max_MyString_Length => 2048);
    S  : Lines.MyString;
+   LOCKED : Boolean := true;
+   MASTERPIN : PIN.PIN;
 begin
 
-   Put(MyCommandLine.Command_Name); Put_Line(" is running!");
-   Put("I was invoked with "); Put(MyCommandLine.Argument_Count,0); Put_Line(" arguments.");
-   for Arg in 1..MyCommandLine.Argument_Count loop
-      Put("Argument "); Put(Arg,0); Put(": """);
-      Put(MyCommandLine.Argument(Arg)); Put_Line("""");
+   if MyCommandLine.Argument_Count /= 1 then
+      return;
+   end if;
+
+   MASTERPIN := Pin.From_String(MyCommandLine.Argument(1));
+   PasswordDatabase.Init(DB);
+
+   loop 
+      if LOCKED = true then
+         Put("locked>   ");
+      else
+         Put("unlocked> ");
+      end if;
+      Lines.Get_Line(S);
+      exit when Lines.To_String(S) = "";
    end loop;
 
-   PasswordDatabase.Init(DB);
    Put_Line("Adding an entry to the database");
    PasswordDatabase.Put(DB,U1,P1);
 

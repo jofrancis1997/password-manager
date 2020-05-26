@@ -1,7 +1,6 @@
 generic
    Max_MyString_Length : Positive;
 
-
 package MyString with SPARK_Mode is
    type MyString is private;
 
