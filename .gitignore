@@ -85,4 +85,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+*.exe
+
 obj
