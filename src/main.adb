@@ -9,10 +9,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 procedure Main is
    DB : PasswordDatabase.Database;
-   U1 : PasswordDatabase.URL := PasswordDatabase.From_String("google.com");
-   P1 : PasswordDatabase.Password := PasswordDatabase.From_String("test_password");
-   PIN1  : PIN.PIN := PIN.From_String("1234");
-   PIN2  : PIN.PIN := PIN.From_String("1234");
    package Lines is new MyString(Max_MyString_Length => 2048);
    S  : Lines.MyString;
    Locked : Boolean := true;
