@@ -34,23 +34,30 @@ begin
       end if;
       Lines.Get_Line(S);
       declare
-         T : MyStringTokeniser.TokenArray(1..3) := (others => (Start => 1, Length => 0));
+         Tokens : MyStringTokeniser.TokenArray(1..3) := (others => (Start => 1, Length => 0));
          NumTokens : Natural;
       begin
-         MyStringTokeniser.Tokenise(Lines.To_String(S),T,NumTokens);
+         MyStringTokeniser.Tokenise(Lines.To_String(S),Tokens,NumTokens);
          declare
-            Command : String := Lines.To_String(Lines.Substring(S,T(1).Start,T(1).Start+T(1).Length-1));
+            Command : String := Lines.To_String(Lines.Substring(S,Tokens(1).Start,Tokens(1).Start+Tokens(1).Length-1));
          begin
             if Command = "get" then
                if NumTokens /= 2 then
                   return;
                elsif NumTokens = 2 then
                   declare
-                     U : PasswordDatabase.URL := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     T : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
                   begin
-                     if not Locked and PasswordDatabase.Has_Password_For (DB,U) then
-                        Put_Line(PasswordDatabase.To_String(PasswordDatabase.Get(DB,U)));
+                     if not PasswordManager.Is_URL(T) then
+                        return;
                      end if;
+                     declare
+                        U : PasswordDatabase.URL := PasswordDatabase.From_String(T);
+                     begin
+                        if not Locked and PasswordDatabase.Has_Password_For(DB,U) then
+                           Put_Line(PasswordDatabase.To_String(PasswordDatabase.Get(DB,U)));
+                        end if;
+                     end;
                   end;
                end if;
             elsif Command = "rem" then
@@ -58,11 +65,18 @@ begin
                   return;
                elsif NumTokens = 2 then
                   declare
-                     U : PasswordDatabase.URL := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     T : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
                   begin
-                     if not Locked and PasswordDatabase.Has_Password_For(DB,U) then
-                        PasswordDatabase.Remove(DB,U);
+                     if not PasswordManager.Is_URL(T) then
+                        return;
                      end if;
+                     declare
+                        U : PasswordDatabase.URL := PasswordDatabase.From_String(T);
+                     begin
+                        if not Locked and PasswordDatabase.Has_Password_For(DB,U) then
+                           PasswordDatabase.Remove(DB,U);
+                        end if;
+                     end;
                   end;
                end if;
             elsif Command = "put" then
@@ -70,12 +84,20 @@ begin
                   return;
                elsif NumTokens = 3 then
                   declare
-                     U : PasswordDatabase.URL := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
-                     P : PasswordDatabase.Password := PasswordDatabase.From_String(Lines.To_String(Lines.Substring(S,T(3).Start,T(3).Start+T(3).Length-1)));
+                     T1 : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
+                     T2 : String := Lines.To_String(Lines.Substring(S,Tokens(3).Start,Tokens(3).Start+Tokens(3).Length-1));
                   begin
-                     if not Locked then
-                        PasswordDatabase.Put(DB,U,P);
+                     if not (PasswordManager.Is_URL(T1) and PasswordManager.Is_Password(T2)) then
+                        return;
                      end if;
+                     declare
+                        U : PasswordDatabase.URL := PasswordDatabase.From_String(T1);
+                        P : PasswordDatabase.Password := PasswordDatabase.From_String(T2);
+                     begin
+                        if not Locked then
+                           PasswordDatabase.Put(DB,U,P);
+                        end if;
+                     end;
                   end;
                end if;
             elsif Command = "unlock" then
@@ -83,11 +105,18 @@ begin
                   return;
                elsif NumTokens = 2 then
                   declare
-                     P : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     T : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
                   begin
-                     if Locked and PIN."="(Masterpin,P) then
-                        Locked := false;
+                     if not PasswordManager.Is_PIN(T) then
+                        return;
                      end if;
+                     declare
+                        P : PIN.PIN := PIN.From_String(T);
+                     begin
+                        if Locked and PIN."="(Masterpin,P) then
+                           Locked := false;
+                        end if;
+                     end;
                   end;
                end if;
             elsif Command = "lock" then
@@ -95,12 +124,19 @@ begin
                   return;
                elsif NumTokens = 2 then
                   declare
-                     P : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     T : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
                   begin
-                     if not Locked then
-                        Masterpin := P;
-                        Locked := true;
+                     if not PasswordManager.Is_PIN(T) then
+                        return;
                      end if;
+                     declare
+                        P : PIN.PIN := PIN.From_String(T);
+                     begin
+                        if not Locked then
+                           Masterpin := P;
+                           Locked := true;
+                        end if;
+                     end;
                   end;
                end if;
             else

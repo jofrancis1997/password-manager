@@ -16,4 +16,14 @@ package body PasswordManager with Spark_Mode is
       end loop;
       return true;
    end Is_PIN;
+
+   function Is_URL(S : in String) return Boolean is
+   begin
+      return S'Length <= 1024;
+   end Is_URL;
+
+   function Is_Password(S : in String) return Boolean is
+   begin
+      return S'Length <= 100;
+   end Is_Password;
 end PasswordManager;
