@@ -1,3 +1,5 @@
+with PasswordDatabase;
+
 package body PasswordManager with Spark_Mode is
    function Is_PIN(S : in String) return Boolean is
    begin
@@ -19,11 +21,11 @@ package body PasswordManager with Spark_Mode is
 
    function Is_URL(S : in String) return Boolean is
    begin
-      return S'Length <= 1024;
+      return S'Length <= PasswordDatabase.Max_URL_Length;
    end Is_URL;
 
    function Is_Password(S : in String) return Boolean is
    begin
-      return S'Length <= 100;
+      return S'Length <= PasswordDatabase.Max_Password_Length;
    end Is_Password;
 end PasswordManager;

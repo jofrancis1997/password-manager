@@ -8,6 +8,9 @@ with MyStringTokeniser;
 with PIN;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+with Ada.Containers;
+use Ada.Containers;
+
 procedure Main is
    DB : PasswordDatabase.Database;
    package Lines is new MyString(Max_MyString_Length => 2048);
@@ -38,6 +41,9 @@ begin
          NumTokens : Natural;
       begin
          MyStringTokeniser.Tokenise(Lines.To_String(S),Tokens,NumTokens);
+         if NumTokens = 0 then
+            return;
+         end if;
          declare
             Command : String := Lines.To_String(Lines.Substring(S,Tokens(1).Start,Tokens(1).Start+Tokens(1).Length-1));
          begin
@@ -87,7 +93,7 @@ begin
                      T1 : String := Lines.To_String(Lines.Substring(S,Tokens(2).Start,Tokens(2).Start+Tokens(2).Length-1));
                      T2 : String := Lines.To_String(Lines.Substring(S,Tokens(3).Start,Tokens(3).Start+Tokens(3).Length-1));
                   begin
-                     if not (PasswordManager.Is_URL(T1) and PasswordManager.Is_Password(T2)) then
+                     if PasswordDatabase.Length(DB) >= PasswordDatabase.Max_Entries or not (PasswordManager.Is_URL(T1) and PasswordManager.Is_Password(T2)) then
                         return;
                      end if;
                      declare
