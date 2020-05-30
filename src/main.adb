@@ -93,7 +93,8 @@ begin
                   declare
                      Number : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                   begin
-                     if not Locked and PIN."="(Masterpin,Number) then
+                     if not Locked then
+                        Masterpin := Number;
                         Locked := true;
                      end if;
                   end;
