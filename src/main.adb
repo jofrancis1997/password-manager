@@ -1,6 +1,7 @@
 pragma SPARK_Mode (On);
 
 with PasswordDatabase;
+with PasswordManager;
 with MyCommandLine;
 with MyString;
 with MyStringTokeniser;
@@ -14,8 +15,11 @@ procedure Main is
    Locked : Boolean := true;
    Masterpin : PIN.PIN;
 begin
-
    if MyCommandLine.Argument_Count /= 1 then
+      return;
+   end if;
+
+   if not PasswordManager.Is_PIN(MyCommandLine.Argument(1)) then
       return;
    end if;
 
@@ -30,7 +34,7 @@ begin
       end if;
       Lines.Get_Line(S);
       declare
-         T : MyStringTokeniser.TokenArray(1..5) := (others => (Start => 1, Length => 0));
+         T : MyStringTokeniser.TokenArray(1..3) := (others => (Start => 1, Length => 0));
          NumTokens : Natural;
       begin
          MyStringTokeniser.Tokenise(Lines.To_String(S),T,NumTokens);
@@ -79,9 +83,9 @@ begin
                   return;
                elsif NumTokens = 2 then
                   declare
-                     Number : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     P : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                   begin
-                     if Locked and PIN."="(Masterpin,Number) then
+                     if Locked and PIN."="(Masterpin,P) then
                         Locked := false;
                      end if;
                   end;
@@ -91,10 +95,10 @@ begin
                   return;
                elsif NumTokens = 2 then
                   declare
-                     Number : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
+                     P : PIN.PIN := PIN.From_String(Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                   begin
                      if not Locked then
-                        Masterpin := Number;
+                        Masterpin := P;
                         Locked := true;
                      end if;
                   end;
