@@ -38,7 +38,7 @@ begin
             Command : String := Lines.To_String(Lines.Substring(S,T(1).Start,T(1).Start+T(1).Length-1));
          begin
             if Command = "get" then
-               if NumTokens > 2 then
+               if NumTokens /= 2 then
                   return;
                elsif NumTokens = 2 then
                   declare
@@ -50,7 +50,7 @@ begin
                   end;
                end if;
             elsif Command = "rem" then
-               if NumTokens > 2 then
+               if NumTokens /= 2 then
                   return;
                elsif NumTokens = 2 then
                   declare
@@ -62,7 +62,7 @@ begin
                   end;
                end if;
             elsif Command = "put" then
-               if NumTokens > 3 then
+               if NumTokens /= 3 then
                   return;
                elsif NumTokens = 3 then
                   declare
@@ -75,7 +75,7 @@ begin
                   end;
                end if;
             elsif Command = "unlock" then
-               if NumTokens > 2 then
+               if NumTokens /= 2 then
                   return;
                elsif NumTokens = 2 then
                   declare
@@ -87,7 +87,7 @@ begin
                   end;
                end if;
             elsif Command = "lock" then
-               if NumTokens > 2 then
+               if NumTokens /= 2 then
                   return;
                elsif NumTokens = 2 then
                   declare
