@@ -13,7 +13,7 @@ package body PasswordManager with Spark_Mode is
             if Ch < '0' or Ch > '9' then
                return false;
             end if;
-            pragma Loop_Invariant (Ch >= '0' and Ch <= '9');
+            pragma Loop_Invariant (for all J in S'First..I => S(J) >= '0' and S(J) <= '9');
          end;
       end loop;
       return true;
