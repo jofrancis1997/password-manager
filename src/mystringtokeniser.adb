@@ -17,6 +17,7 @@ package body MyStringTokeniser with SPARK_Mode is
                    Tokens(J).Length > 0) and then
             Tokens(J).Length-1 <= S'Last - Tokens(J).Start);
 
+         -- this condition prevents array out of bounds
          pragma Loop_Invariant (OutIndex = Tokens'First + Count);
 
          -- look for start of next token
