@@ -1,7 +1,4 @@
-
 package body MyStringTokeniser with SPARK_Mode is
-
-
 
    procedure Tokenise(S : in String; Tokens : in out TokenArray; Count : out Natural) is
       Index : Positive;
