@@ -1,32 +1,75 @@
 --Task 4 Report
 
 -- 1:
---  LOCK operation can only be performed if Password Manager is in unlocked state.
---  This security property is specified by the postcondition that states that if Password Manager
---  is unlocked, then master PIN is updated and Password Manager changes to the locked state.
+--  LOCK operation can only be performed if:
+--   - Password Manager is in unlocked state.
+--  These security properties are specified by the following
+--  pre and post conditions:
+--  Precondition:
+--   - Password Manager must be unlocked.
+--  Postconditions:
+--   - no new entries were added to the database,
+--   - Password Manager becomes locked,
+--   - master PIN is updated.
 
 -- 2:
---  UNLOCK operation can only be performed if Password Manager is in locked state.
---  This security property is specified by the postcondition that states that if Password Manager
---  length is the same as before and Password Manager is locked and the PIN provided is correct
---  then Password Manager becomes unlocked.
+--  UNLOCK operation can only be performed if:
+--   - Password Manager is in locked state.
+--   - PIN provided corresponds to the master PIN.
+--  These security properties are specified by the following
+--  pre and post conditions:
+--  Precondition:
+--   - Password Manager must be locked.
+--  Postconditions:
+--   - no new entries were added to the database,
+--   - if PIN provided is master PIN, Password Manager becomes unlocked,
+--   - if PIN provided is not master PIN, Password Manager stays locked.
 
 -- 3:
---  GET operation can only be performed if Password Manager is in unlocked state.
---  This security property is specified by the precondition that states that if Password Manager
---  is in unlocked state and Database has a password for the URL provided, then the password is returned.
+--  GET operation can only be performed if:
+--   - Password Manager is in unlocked state.
+--  This security property is specified by the following preconditions:
+--  Preconditions:
+--   - Password Manager is in unlocked state,
+--   - Database has a password for the URL provided.
 
 -- 4:
---  PUT operation can only be performed if Password Manager is in unlocked state.
---  This security property is specified by the precondition that states that Password Manager cannot be full
---  or it cannot have a password associated with the URL being provided.
---  This security property is also specified by the postcondition that states that Password Manager remains
---  in the same state after this operation is performed.
+--  PUT operation can only be performed if:
+--   - Password Manager is in unlocked state,
+--   - Database is not full.
+--  This security property is specified by the following
+--  pre and post conditions
+--  Preconditions:
+--   - Password Manager is in unlocked state,
+--   - Password Manager cannot be full,
+--     or if it is full, the URL being provided must already be in Database.
+--  Postcondition:
+--   - Password Manager remains in the same state after this operation
+--     is performed.
 
 -- 5:
---  REMOVE operation can only be performed if Password Manager is in unlocked state.
---  This security property is specified by the postcondition that states that after removing the specified entry,
---  Password Manager's state remains the same after the operation is performed.
+--  REMOVE operation can only be performed if:
+--   - Password Manager is in unlocked state,
+--   - Database contains an entry for the URL provided.
+--  This security property is specified by the following
+--  pre and post conditions
+--  Precondition:
+--   - Password Manager is in unlocked state,
+--  Postconditions:
+--   - Password Manager remains in the same state after this operation
+--     is performed.
+
+-- 6:
+--  INIT initialises Password Manager in locked state with provided master PIN.
+--  This security property is specified by the following postconditions:
+--  Postcondition:
+--   - Password Manager is in locked state,
+--   - Master PIN is set to the provided PIN.
+
+-- 7:
+--  All inputs such as PIN, passwords, URLs and input lines
+--  are verified to ensure that they are valid and within
+--  range, when applicable.
 
 
 pragma SPARK_Mode (On);
@@ -150,7 +193,7 @@ begin
                      declare
                         P : PIN.PIN := PIN.From_String(T);
                      begin
-                        if PasswordManager.Locked(M) then 
+                        if PasswordManager.Locked(M) then
                            PasswordManager.Unlock(M,P);
                         end if;
                      end;
