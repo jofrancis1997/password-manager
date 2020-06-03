@@ -12,9 +12,9 @@ package PasswordManager with Spark_Mode is
 
    procedure Lock(M : in out Manager; P : in PIN.PIN) with
       Pre => not Locked(M),
-      Post => (if not Locked(M'Old) then
+      Post => Length(M'Old) = Length(M) and
          Locked(M) = True and
-         PIN_Is_Master(M,P) = True);
+         PIN_Is_Master(M,P) = True;
 
    procedure Unlock(M : in out Manager; P : in PIN.PIN) with
       Pre => Locked(M),
