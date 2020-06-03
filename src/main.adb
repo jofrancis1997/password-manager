@@ -1,3 +1,34 @@
+--Task 4 Report
+
+-- 1:
+--  LOCK operation can only be performed if Password Manager is in unlocked state.
+--  This security property is specified by the postcondition that states that if Password Manager
+--  is unlocked, then master PIN is updated and Password Manager changes to the locked state.
+
+-- 2:
+--  UNLOCK operation can only be performed if Password Manager is in locked state.
+--  This security property is specified by the postcondition that states that if Password Manager
+--  length is the same as before and Password Manager is locked and the PIN provided is correct
+--  then Password Manager becomes unlocked.
+
+-- 3:
+--  GET operation can only be performed if Password Manager is in unlocked state.
+--  This security property is specified by the precondition that states that if Password Manager
+--  is in unlocked state and Database has a password for the URL provided, then the password is returned.
+
+-- 4:
+--  PUT operation can only be performed if Password Manager is in unlocked state.
+--  This security property is specified by the precondition that states that Password Manager cannot be full
+--  or it cannot have a password associated with the URL being provided.
+--  This security property is also specified by the postcondition that states that Password Manager remains
+--  in the same state after this operation is performed.
+
+-- 5:
+--  REMOVE operation can only be performed if Password Manager is in unlocked state.
+--  This security property is specified by the postcondition that states that after removing the specified entry,
+--  Password Manager's state remains the same after the operation is performed.
+
+
 pragma SPARK_Mode (On);
 
 with PasswordDatabase;
@@ -26,7 +57,7 @@ begin
 
    PasswordManager.Init(M,PIN.From_String(MyCommandLine.Argument(1)));
 
-   loop 
+   loop
       if PasswordManager.Locked(M) then
          Put("locked>   ");
       else
