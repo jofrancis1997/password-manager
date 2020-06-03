@@ -11,23 +11,27 @@ package PasswordManager with Spark_Mode is
       Post => Locked(M) = True and PIN_Is_Master(M,P) = True;
 
    procedure Lock(M : in out Manager; P : in PIN.PIN) with
+      Pre => not Locked(M),
       Post => (if not Locked(M'Old) then
          Locked(M) = True and
          PIN_Is_Master(M,P) = True);
 
    procedure Unlock(M : in out Manager; P : in PIN.PIN) with
+      Pre => Locked(M),
       Post => Length(M) = Length(M'Old) and
-         (if Locked(M'Old) and PIN_Is_Master(M'Old,P) then
-            Locked(M) = False);
+         (if PIN_Is_Master(M'Old,P) then Locked(M) = False) and 
+         (if not PIN_Is_Master(M'Old,P) then Locked(M) = True);
 
    function Get(M : in Manager; U : in URL) return Password with
       Pre => not Locked(M) and Has_Password_For(M,U);
 
    procedure Put(M : in out Manager; U : in URL; P : in Password) with
-      Pre => Length(M) < Max_Entries or Has_Password_For(M,U),
+      Pre => not Locked(M) and
+         (Length(M) < Max_Entries or Has_Password_For(M,U)),
       Post => Locked(M) = Locked(M'Old);
 
    procedure Remove(M : in out Manager; U : in URL) with
+      Pre => not Locked(M),
       Post => Locked(M) = Locked(M'Old);
 
    function Locked(M : in Manager) return Boolean;

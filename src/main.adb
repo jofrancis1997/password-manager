@@ -76,7 +76,9 @@ begin
                      declare
                         U : PasswordDatabase.URL := PasswordDatabase.From_String(T);
                      begin
-                        PasswordManager.Remove(M,U);
+                        if not PasswordManager.Locked(M) then
+                           PasswordManager.Remove(M,U);
+                        end if;
                      end;
                   end;
                end if;
@@ -98,7 +100,9 @@ begin
                         if PasswordManager.Length(M) >= PasswordDatabase.Max_Entries and not PasswordManager.Has_Password_For(M,U) then
                            return;
                         end if;
-                        PasswordManager.Put(M,U,P);
+                        if not PasswordManager.Locked(M) then
+                           PasswordManager.Put(M,U,P);
+                        end if;
                      end;
                   end;
                end if;
@@ -115,7 +119,9 @@ begin
                      declare
                         P : PIN.PIN := PIN.From_String(T);
                      begin
-                        PasswordManager.Unlock(M,P);
+                        if PasswordManager.Locked(M) then 
+                           PasswordManager.Unlock(M,P);
+                        end if;
                      end;
                   end;
                end if;
@@ -132,7 +138,9 @@ begin
                      declare
                         P : PIN.PIN := PIN.From_String(T);
                      begin
-                        PasswordManager.Lock(M,P);
+                        if not PasswordManager.Locked(M) then
+                           PasswordManager.Lock(M,P);
+                        end if;
                      end;
                   end;
                end if;

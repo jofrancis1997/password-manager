@@ -11,15 +11,13 @@ package body PasswordManager with Spark_Mode is
 
    procedure Lock(M : in out Manager; P : in PIN.PIN) is
    begin
-      if not M.locked then
-         M.masterpin := P;
-         M.locked := true;
-      end if;
+      M.masterpin := P;
+      M.locked := true;
    end Lock;
 
    procedure Unlock(M : in out Manager; P : in PIN.PIN) is
    begin
-      if M.locked and PIN."="(M.masterpin,P) then
+      if PIN."="(M.masterpin,P) then
          M.locked := false;
       end if;
    end Unlock;
@@ -31,14 +29,12 @@ package body PasswordManager with Spark_Mode is
 
    procedure Put(M : in out Manager; U : in PasswordDatabase.URL; P : in PasswordDatabase.Password) is
    begin
-      if not M.locked then
-         PasswordDatabase.Put(M.database,U,P);
-      end if;
+      PasswordDatabase.Put(M.database,U,P);
    end Put;
 
    procedure Remove(M : in out Manager; U : in PasswordDatabase.URL) is
    begin
-      if not M.locked and PasswordDatabase.Has_Password_For(M.database, U) then
+      if PasswordDatabase.Has_Password_For(M.database, U) then
          PasswordDatabase.Remove(M.database,U);
       end if;
    end Remove;
