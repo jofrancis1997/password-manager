@@ -1,10 +1,11 @@
---Task 4 Report
+--  Task 4 Report
 
--- 1:
 --  LOCK operation can only be performed if:
 --   - Password Manager is in unlocked state.
+--
 --  These security properties are specified by the following
 --  pre and post conditions:
+--
 --  Precondition:
 --   - Password Manager must be unlocked.
 --  Postconditions:
@@ -12,12 +13,13 @@
 --   - Password Manager becomes locked,
 --   - master PIN is updated.
 
--- 2:
 --  UNLOCK operation can only be performed if:
 --   - Password Manager is in locked state.
 --   - PIN provided corresponds to the master PIN.
+--
 --  These security properties are specified by the following
 --  pre and post conditions:
+--
 --  Precondition:
 --   - Password Manager must be locked.
 --  Postconditions:
@@ -25,20 +27,22 @@
 --   - if PIN provided is master PIN, Password Manager becomes unlocked,
 --   - if PIN provided is not master PIN, Password Manager stays locked.
 
--- 3:
 --  GET operation can only be performed if:
 --   - Password Manager is in unlocked state.
+--
 --  This security property is specified by the following preconditions:
+--
 --  Preconditions:
 --   - Password Manager is in unlocked state,
 --   - Database has a password for the URL provided.
 
--- 4:
 --  PUT operation can only be performed if:
 --   - Password Manager is in unlocked state,
 --   - Database is not full.
+--
 --  This security property is specified by the following
---  pre and post conditions
+--  pre and post conditions:
+--
 --  Preconditions:
 --   - Password Manager is in unlocked state,
 --   - Password Manager cannot be full,
@@ -46,27 +50,41 @@
 --  Postcondition:
 --   - Password Manager remains in the same state after this operation
 --     is performed.
+--
+--  An additional postcondition that could be added to Put would be to check
+--  that the password manager has a password for the given URL, this would
+--  require changes to the postcondition of the PasswordDatabase.Put procedure.
 
--- 5:
 --  REMOVE operation can only be performed if:
 --   - Password Manager is in unlocked state,
 --   - Database contains an entry for the URL provided.
+--
 --  This security property is specified by the following
---  pre and post conditions
+--  pre and post conditions:
+--
 --  Precondition:
 --   - Password Manager is in unlocked state,
 --  Postconditions:
 --   - Password Manager remains in the same state after this operation
 --     is performed.
+--
+--  An additinal postcondition that could be added to Remove would be to check
+--  that the password manager no longer has a password for the given URL, this
+--  would require changes to the postcondition of the PasswordDatabase.Remove
+--  procedure.
 
--- 6:
 --  INIT initialises Password Manager in locked state with provided master PIN.
+--
 --  This security property is specified by the following postconditions:
+--
 --  Postcondition:
 --   - Password Manager is in locked state,
 --   - Master PIN is set to the provided PIN.
+--
+--  An additional postcondition that could be added to Init would be to check
+--  that the length of the initialised database is 0, this would require changes
+--  to the postcondition of the PasswordDatabase.Init procedure.
 
--- 7:
 --  All inputs such as PIN, passwords, URLs and input lines
 --  are verified to ensure that they are valid and within
 --  range, when applicable.
