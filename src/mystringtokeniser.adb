@@ -12,7 +12,7 @@ package body MyStringTokeniser with SPARK_Mode is
       Index := S'First;
       while OutIndex <= Tokens'Last and Index <= S'Last and Count < Tokens'Length loop
 
-         -- this condition constrains the bounds of the all the tokens do not
+         -- this condition ensures the bounds of each of the tokens do not
          -- exceed the bounds of the string, preventing overflow
          pragma Loop_Invariant
            (for all J in Tokens'First..OutIndex-1 =>
