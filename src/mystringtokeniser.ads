@@ -15,13 +15,18 @@ package MyStringTokeniser with SPARK_Mode is
 
    -- Pre:
    --   Checks length of the string being passed
-   --   If it is bigger than 0, then first element index is smaller than the last element index
+   --   If it is larger than 0, then first element index is smaller than the
+   --   last element index
+   --   First index of Tokens is less than or equal to the last index of Tokens
    --
    -- Post:
-   --   The count of elements is less or equal to the length of the string
-   --   First token's index is equal or bigger than first element index
-   --   Number of Tokens is bigger than 0
-   --   If these hold then last token is lesser or equal to the amount of tokens parsed
+   --   The count of tokens is less or equal to the length of Tokens
+   --   For all tokens:
+   --     - the start index of the token is greater than or equal to the start
+   --       index of the string
+   --     - the length of the token is greater than 0
+   --     - if these hold then the index of the last character of the token is
+   --       less than the last index of S
    procedure Tokenise(S : in String; Tokens : in out TokenArray; Count : out Natural) with
      Pre => (if S'Length > 0 then S'First <= S'Last) and Tokens'First <= Tokens'Last,
      Post => Count <= Tokens'Length and
