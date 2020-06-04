@@ -106,15 +106,23 @@ begin
       else
          Put("unlocked> ");
       end if;
+
       Lines.Get_Line(S);
+
+      if Lines.Length(S) > 2048 then
+         return;
+      end if;
+
       declare
          Tokens : MyStringTokeniser.TokenArray(1..4) := (others => (Start => 1, Length => 0));
          NumTokens : Natural;
       begin
          MyStringTokeniser.Tokenise(Lines.To_String(S),Tokens,NumTokens);
+
          if NumTokens = 0 then
             return;
          end if;
+
          declare
             Command : String := Lines.To_String(Lines.Substring(S,Tokens(1).Start,Tokens(1).Start+Tokens(1).Length-1));
          begin
@@ -128,6 +136,7 @@ begin
                      if not PasswordManager.Is_URL(T) then
                         return;
                      end if;
+
                      declare
                         U : PasswordDatabase.URL := PasswordDatabase.From_String(T);
                      begin
@@ -147,6 +156,7 @@ begin
                      if not PasswordManager.Is_URL(T) then
                         return;
                      end if;
+
                      declare
                         U : PasswordDatabase.URL := PasswordDatabase.From_String(T);
                      begin
@@ -167,6 +177,7 @@ begin
                      if not (PasswordManager.Is_URL(T1) and PasswordManager.Is_Password(T2)) then
                         return;
                      end if;
+
                      declare
                         U : PasswordDatabase.URL := PasswordDatabase.From_String(T1);
                         P : PasswordDatabase.Password := PasswordDatabase.From_String(T2);
@@ -190,6 +201,7 @@ begin
                      if not PasswordManager.Is_PIN(T) then
                         return;
                      end if;
+
                      declare
                         P : PIN.PIN := PIN.From_String(T);
                      begin
@@ -209,6 +221,7 @@ begin
                      if not PasswordManager.Is_PIN(T) then
                         return;
                      end if;
+
                      declare
                         P : PIN.PIN := PIN.From_String(T);
                      begin

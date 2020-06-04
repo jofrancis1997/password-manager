@@ -19,7 +19,7 @@ package PasswordManager with Spark_Mode is
    procedure Unlock(M : in out Manager; P : in PIN.PIN) with
       Pre => Locked(M),
       Post => Length(M) = Length(M'Old) and
-         (if PIN_Is_Master(M'Old,P) then Locked(M) = False) and 
+         (if PIN_Is_Master(M'Old,P) then Locked(M) = False) and
          (if not PIN_Is_Master(M'Old,P) then Locked(M) = True);
 
    function Get(M : in Manager; U : in URL) return Password with
@@ -64,7 +64,7 @@ private
    function Locked(M : in Manager) return Boolean is
       (M.locked);
 
-   function Has_Password_For(M : in Manager; U : in URL) return Boolean is 
+   function Has_Password_For(M : in Manager; U : in URL) return Boolean is
       (PasswordDatabase.Has_Password_For(m.database,U));
 
    function Length(M : in Manager) return Ada.Containers.Count_Type is
