@@ -11,6 +11,8 @@ package body MyStringTokeniser with SPARK_Mode is
       end if;
       Index := S'First;
       while OutIndex <= Tokens'Last and Index <= S'Last and Count < Tokens'Length loop
+      
+         -- this condition constrains the bounds of the tokens, preventing any overflow
          pragma Loop_Invariant
            (for all J in Tokens'First..OutIndex-1 =>
               (Tokens(J).Start >= S'First and
