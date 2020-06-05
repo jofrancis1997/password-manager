@@ -3,8 +3,8 @@
 --  LOCK operation can only be performed if:
 --   - Password Manager is in unlocked state.
 --
---  These security properties are specified by the following
---  pre and post conditions:
+--  These security properties are specified by the following pre and post
+--  conditions:
 --
 --  Precondition:
 --   - Password Manager must be unlocked.
@@ -40,38 +40,39 @@
 --   - Password Manager is in unlocked state,
 --   - Database is not full.
 --
---  This security property is specified by the following
---  pre and post conditions:
+--  This security property is specified by the following pre and post
+--  conditions:
 --
 --  Preconditions:
 --   - Password Manager is in unlocked state,
---   - Password Manager cannot be full,
---     or if it is full, the URL being provided must already be in Database.
+--   - Password Manager cannot be full, or if it is full, the URL being provided
+--     must already be in the Database.
 --  Postcondition:
---   - Password Manager remains in the same state after this operation
---     is performed.
+--   - Password Manager remains in the same state after this operation is
+--     performed.
 --
---  An additional postcondition that could be added to Put would be to check
---  that the password manager has a password for the given URL, this would
---  require changes to the postcondition of the PasswordDatabase.Put procedure.
+--  Additional postconditions that could be added to Put would be to check that
+--  the password manager has a password for the given URL, and that the length
+--  of the manager is increased by 1, these would require changes to the
+--  postcondition of the PasswordDatabase.Put procedure.
 
 --  REMOVE operation can only be performed if:
 --   - Password Manager is in unlocked state,
 --   - Database contains an entry for the URL provided.
 --
---  This security property is specified by the following
---  pre and post conditions:
+--  This security property is specified by the following pre and post
+--  conditions:
 --
 --  Precondition:
 --   - Password Manager is in unlocked state,
 --  Postconditions:
---   - Password Manager remains in the same state after this operation
---     is performed.
+--   - Password Manager remains in the same state after this operation is
+--     performed.
 --
---  An additinal postcondition that could be added to Remove would be to check
---  that the password manager no longer has a password for the given URL, this
---  would require changes to the postcondition of the PasswordDatabase.Remove
---  procedure.
+--  Additinal postcondition that could be added to Remove would be to check that
+--  the password manager no longer has a password for the given URL, and that
+--  the length of the password manager has decreased by 1, these would require
+--  changes to the postcondition of the PasswordDatabase.Remove procedure.
 
 --  INIT initialises Password Manager in locked state with provided master PIN.
 --
@@ -85,9 +86,8 @@
 --  that the length of the initialised database is 0, this would require changes
 --  to the postcondition of the PasswordDatabase.Init procedure.
 
---  All inputs such as PIN, passwords, URLs and input lines
---  are verified to ensure that they are valid and within
---  range, when applicable.
+--  All inputs such as PIN, passwords, URLs and input lines are verified to
+--  ensure that they are valid and within range, when applicable.
 
 
 pragma SPARK_Mode (On);
@@ -105,7 +105,7 @@ use Ada.Containers;
 
 procedure Main is
    M : PasswordManager.Manager;
-   package Lines is new MyString(Max_MyString_Length => 2048);
+   package Lines is new MyString(Max_MyString_Length => 2049);
    S  : Lines.MyString;
 begin
    if MyCommandLine.Argument_Count /= 1 then
@@ -130,6 +130,8 @@ begin
       if Lines.Length(S) > 2048 then
          return;
       end if;
+
+      pragma Loop_Invariant (Lines.Length(S) <= 2048);
 
       declare
          Tokens : MyStringTokeniser.TokenArray(1..4) := (others => (Start => 1, Length => 0));
