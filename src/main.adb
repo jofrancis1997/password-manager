@@ -69,7 +69,7 @@
 --   - Password Manager remains in the same state after this operation is
 --     performed.
 --
---  Additinal postcondition that could be added to Remove would be to check that
+--  Additional postcondition that could be added to Remove would be to check that
 --  the password manager no longer has a password for the given URL, and that
 --  the length of the password manager has decreased by 1, these would require
 --  changes to the postcondition of the PasswordDatabase.Remove procedure.
